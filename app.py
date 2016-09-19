@@ -1,9 +1,7 @@
-from chalice import Chalice, BadRequestError
+from chalice import Chalice
 from datetime import datetime
-import boto3
 import json
 import logging
-import os
 import requests
 
 FIREBASE_DATABASE_ENDPOINT = 'https://gatekeeper-kew.firebaseio.com'
@@ -29,7 +27,7 @@ def particle_event():
     logger.info("Recieved Particle event: {}".format(json.dumps(event)))
 
     # Check we have the required event keys.
-    for key in ['name', 'value', 'source']:
+    for key in ['name', 'source']:
         if key not in event:
             raise BadRequestError("The `{}` key was missing from the event.".format(key))
 
@@ -62,7 +60,6 @@ def particle_event():
             'data': {
                 'event': {
                     'name': event['name'],
-                    'value': event['value'],
                     'source': event['source']
                 }
             }
