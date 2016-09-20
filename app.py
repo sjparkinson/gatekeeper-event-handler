@@ -12,7 +12,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 app = Chalice(app_name='gatekeeper-event-handler')
-app.debug = False
+app.debug = True
 
 
 @app.route('/event', methods=['POST'])
