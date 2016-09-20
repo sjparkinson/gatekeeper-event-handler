@@ -10,8 +10,7 @@ script:
   - flake8 --ignore E501 app.py
 
 before_deploy:
-  - sed --in-place "s/@@FIREBASE_DATABASE_SECRET@@/${FIREBASE_DATABASE_SECRET}/g" app.py
-  - sed --in-place "s/@@FIREBASE_SERVER_KEY@@/${FIREBASE_SERVER_KEY}/g" app.py
+  - perl -i -pe 's/@@(.*)@@/$ENV{$1}/eg' app.py # Substitute configuration from the environment.
 
 deploy:
   provider: script
