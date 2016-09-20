@@ -17,11 +17,10 @@ app.debug = True
 
 @app.route('/event', methods=['POST'])
 def particle_event():
-    logger.debug("Starting event request handling.")
-
+    now = datetime.utcnow()
     event = app.current_request.json_body
 
-    logger.info("Recieved Particle event: {}", json.dumps(event))
+    logger.info("Recieved Particle event: {}" % json.dumps(event))
 
     # Check we have the required event keys.
     for key in ['name', 'source']:
@@ -30,11 +29,11 @@ def particle_event():
 
     # Store event in the database.
     formatted_event = dict(event, **{
-        'published': datetime.utcnow().isoformat(' '),
-        'sort': (datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * -1
+        'published': now.isoformat(' '),
+        'sort': (now - datetime(1970, 1, 1)).total_seconds() * -1
     })
 
-    logger.info("Storing formatted event: {}", json.dumps(formatted_event))
+    logger.info("Storing formatted event: {}" % json.dumps(formatted_event))
 
     response = requests.post(
         FIREBASE_DATABASE_ENDPOINT + '/events.json',
@@ -42,8 +41,8 @@ def particle_event():
         params={'auth': FIREBASE_DATABASE_SECRET}
     )
 
-    logger.info('Database response was: {} {}', response.status_code, response.reason)
-    logger.info('Datebase request took: {}', response.elapsed)
+    logger.info('Database response was: {} {}' % response.status_code, response.reason)
+    logger.info('Datebase request took: {}' % response.elapsed)
 
     logger.info('Sending FCM message.')
 
@@ -62,7 +61,7 @@ def particle_event():
         }
     )
 
-    logger.info('FCM response was: {} {}', response.status_code, response.reason)
-    logger.info('FCM request took: {}', response.elapsed)
+    logger.info('FCM response was: {} {}' % response.status_code, response.reason)
+    logger.info('FCM request took: {}' % response.elapsed)
 
     return "Thanks!"
