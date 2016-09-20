@@ -46,6 +46,7 @@ def particle_event():
     )
 
     logger.info('Database response was: {}'.format(response))
+    logger.info('Datebase request took: {}'.format(response.elapsed))
 
     logger.info('Sending FCM message.')
 
@@ -67,5 +68,6 @@ def particle_event():
     )
 
     logger.info('FCM response was: {}'.format(response))
+    logger.info('FCM request took: {}'.format(response.elapsed))
 
     return "Thanks!"
