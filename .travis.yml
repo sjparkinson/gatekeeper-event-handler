@@ -8,3 +8,9 @@ install:
 
 script:
   - flake8 app.py
+
+deploy:
+  provider: script
+  script: chalice deploy
+  on:
+    branch: master
