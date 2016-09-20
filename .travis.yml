@@ -7,11 +7,11 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - flake8 app.py
-  
+  - flake8 --ignore E501 app.py
+
 before_deploy:
-  - sed --quiet --in-place "s/@@FIREBASE_DATABASE_SECRET@@/${FIREBASE_DATABASE_SECRET}/g" app.py
-  - sed --quiet --in-place "s/@@FIREBASE_SERVER_KEY@@/${FIREBASE_SERVER_KEY}/g" app.py
+  - sed --in-place "s/@@FIREBASE_DATABASE_SECRET@@/${FIREBASE_DATABASE_SECRET}/g" app.py
+  - sed --in-place "s/@@FIREBASE_SERVER_KEY@@/${FIREBASE_SERVER_KEY}/g" app.py
 
 deploy:
   provider: script
