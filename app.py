@@ -1,4 +1,4 @@
-from chalice import Chalice
+from chalice import Chalice, BadRequestError
 from datetime import datetime
 import json
 import logging
@@ -14,9 +14,11 @@ logger.setLevel(logging.DEBUG)
 app = Chalice(app_name='gatekeeper-event-handler')
 app.debug = True
 
+
 @app.route('/')
 def index():
     return "OK"
+
 
 @app.route('/event', methods=['POST'])
 def particle_event():
@@ -29,7 +31,8 @@ def particle_event():
     # Check we have the required event keys.
     for key in ['name', 'source']:
         if key not in event:
-            raise BadRequestError("The `{}` key was missing from the event.".format(key))
+            raise BadRequestError(
+                "The `{}` key was missing from the event.".format(key))
 
     # Store event in the database.
     formatted_event = dict(event, **{
