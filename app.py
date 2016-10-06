@@ -51,7 +51,7 @@ def particle_event():
         'https://fcm.googleapis.com/fcm/send',
         headers={'Authorization': 'key=' + FIREBASE_SERVER_KEY},
         json={
-            'to': event['name'].partition('/')[2],
+            'to': '/topics/' + event['name'].partition('/')[2],
             'data': {
                 'event': {
                     'name': event['name'],
